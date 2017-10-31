@@ -1,0 +1,9 @@
+{
+  "name": "eslint-discord",
+  "description": "ESLint, but it's for Discord.",
+  "private": true,
+  "dependencies": {
+    "discord.js": "^11.2.1",
+    "eslint": "^4.10.0"
+  }
+}
