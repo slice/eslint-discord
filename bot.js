@@ -21,7 +21,7 @@ const yells = creds.yells || [
 ]
 
 // Set of users that the bot doesn't respond to.
-let ignoringUsers = new Set();
+let ignoringUsers = new Set(creds.ignoring || []);
 
 const regex = /```js\n([\s\S]+)\n?```/gi;
 const rules = {
