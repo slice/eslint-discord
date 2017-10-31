@@ -8,23 +8,33 @@ client.on('debug', console.log);
 client.on('warn', console.log);
 client.on('error', console.log);
 
-const channels = ['303292278582280193', '366746609041801227'];
-const yells = [
+// List of channel IDs that the bot should be active in.
+const channels = creds.channels;
+
+// YELL YELL YELL
+const yells = creds.yells || [
   'HEY %, YOUR CODE IS BAD',
   '% WRITES BAD CODE',
   'HAHAHAHAHHAHAHAHAH %',
   'LOL %',
   'HELLO ITS ME %'
 ]
+
+// Set of users that the bot doesn't respond to.
 let ignoringUsers = new Set();
+
 const regex = /```js\n([\s\S]+)\n?```/gi;
 const rules = {
   semi: 'error'
 }
+const linterConfig = {
+  rules,
+  parserOptions: {
+    ecmaVersion: 2015
+  }
+}
 
 client.on('message', async msg => {
-  // Only function in whitelisted channels. Ignore myself, and ignore bots.
-  // Also, ignore blacklisted users.
   if (!channels.includes(msg.channel.id)
       || msg.author.id == client.user.id
       || msg.author.bot
@@ -45,13 +55,9 @@ client.on('message', async msg => {
   }
 
   let code = match[1];
-  let messages = linter.verify(code, {
-    rules, parserOptions: {
-      ecmaVersion: 2015}
-    }, {
-      filename: 'shitcode.js'
-    }
-  );
+
+  // Lint.
+  let messages = linter.verify(code, linterConfig, {filename: 'shitcode.js'});
 
   // It's good!
   if (!messages.length) {
@@ -68,9 +74,7 @@ client.on('message', async msg => {
   ).join('\n')
 
   // Yell at them!
-  await msg.channel.send(
-    yell + '\n\n```js\n' + errorMessage + '\n```'
-  );
+  await msg.channel.send(yell + '\n\n```js\n' + errorMessage + '\n```');
 });
 
 client.login(creds.token);
