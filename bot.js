@@ -18,7 +18,7 @@ const yells = creds.yells || [
   'HAHAHAHAHHAHAHAHAH %',
   'LOL %',
   'HELLO ITS ME %'
-]
+];
 
 // Set of users that the bot doesn't respond to.
 let ignoringUsers = new Set(creds.ignoring || []);
@@ -26,13 +26,13 @@ let ignoringUsers = new Set(creds.ignoring || []);
 const regex = /```js\n([\s\S]+)\n?```/gi;
 const rules = {
   semi: 'error'
-}
+};
 const linterConfig = {
   rules,
   parserOptions: {
     ecmaVersion: 2015
   }
-}
+};
 
 client.on('message', async msg => {
   if (!channels.includes(msg.channel.id)
@@ -61,17 +61,17 @@ client.on('message', async msg => {
 
   // It's good!
   if (!messages.length) {
-    return await msg.react('🍌')
+    return await msg.react('🍌');
   }
 
   const yell = yells[Math.floor(Math.random() * yells.length)]
     .replace('%', msg.author.toString());
 
   // Form error message.
-  await msg.react('🔥')
+  await msg.react('🔥');
   let errorMessage = messages.map(
     msg => `L${msg.line}:C${msg.column}: ${msg.message}`
-  ).join('\n')
+  ).join('\n');
 
   // Yell at them!
   await msg.channel.send(yell + '\n\n```js\n' + errorMessage + '\n```');
